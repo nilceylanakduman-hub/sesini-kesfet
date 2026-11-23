@@ -33,9 +33,7 @@ header h1 {
   margin-bottom: 10px;
 }
 
-header p {
-  opacity: .95;
-}
+header p { opacity: .95; }
 
 nav {
   display: flex;
@@ -55,9 +53,7 @@ nav button {
   font-weight: bold;
 }
 
-nav button:hover {
-  background: #e8d9ff;
-}
+nav button:hover { background: #e8d9ff; }
 
 .container {
   max-width: 900px;
@@ -83,9 +79,7 @@ h3 {
   color: #6c4c9b;
 }
 
-p {
-  line-height: 1.7;
-}
+p { line-height: 1.7; }
 
 .hero {
   text-align: center;
@@ -121,9 +115,7 @@ p {
   margin: 10px 5px;
 }
 
-.main-button:hover {
-  opacity: .85;
-}
+.main-button:hover { opacity: .85; }
 
 .secondary {
   background: #eee5fa;
@@ -166,13 +158,8 @@ textarea {
   font-size: 14px;
 }
 
-.page {
-  display: none;
-}
-
-.page.active {
-  display: block;
-}
+.page { display: none; }
+.page.active { display: block; }
 
 footer {
   text-align: center;
@@ -182,9 +169,9 @@ footer {
 }
 
 @media(max-width:600px) {
-  header h1 {font-size:25px;}
-  .card {padding:19px;}
-  nav button {font-size:12px;padding:10px;}
+  header h1 { font-size:25px; }
+  .card { padding:19px; }
+  nav button { font-size:12px; padding:10px; }
 }
 </style>
 </head>
@@ -206,7 +193,6 @@ footer {
 
 <main class="container">
 
-<!-- ANA SAYFA -->
 <section id="home" class="page active">
   <div class="card hero">
     <div class="emoji">🎤</div>
@@ -235,7 +221,6 @@ footer {
   </div>
 </section>
 
-<!-- SES ANALİZİ -->
 <section id="analysis" class="page">
   <div class="card hero">
     <h2>🎤 Ses Analizi</h2>
@@ -262,7 +247,6 @@ footer {
   </div>
 </section>
 
-<!-- EGZERSİZLER -->
 <section id="training" class="page">
   <div class="card">
     <h2>🎼 Ses Egzersizleri</h2>
@@ -304,7 +288,6 @@ footer {
   </div>
 </section>
 
-<!-- GELİŞİM -->
 <section id="progress" class="page">
   <div class="card">
     <h2>📈 Gelişimim</h2>
@@ -326,7 +309,6 @@ footer {
   </div>
 </section>
 
-<!-- ÖZGÜVEN -->
 <section id="confidence" class="page">
   <div class="card">
     <h2>💜 Özgüven Köşesi</h2>
@@ -381,20 +363,23 @@ footer {
 </footer>
 
 <script>
+// SAYFA GEÇİŞLERİ
 function showPage(id) {
   document.querySelectorAll('.page').forEach(page => {
     page.classList.remove('active');
   });
+
   document.getElementById(id).classList.add('active');
 }
 
 // SES ANALİZİ
-let audioContext;
-let analyser;
-let microphone;
-let animationId;
-let stream;
+let audioContext = null;
+let analyser = null;
+let microphone = null;
+let animationId = null;
+let stream = null;
 let lastDetectedPitch = null;
+
 function getNote(freq) {
   const notes = [
     "Do","Do♯","Re","Re♯","Mi","Fa",
@@ -469,75 +454,36 @@ function detectPitch(buffer, sampleRate) {
 
   return sampleRate / bestLag;
 }
-  rms = Math.sqrt(rms / size);
 
-  if (rms < 0.015) return null;
-
-  let bestOffset = -1;
-  let bestCorrelation = 0;
-
-  for (let offset = 30; offset < size / 2; offset++) {
-    let correlation = 0;
-
-    for (let i = 0; i < size / 2; i++) {
-      correlation += buffer[i] * buffer[i + offset];
-    }
-
-    correlation /= size / 2;
-
-    if (correlation > bestCorrelation) {
-      bestCorrelation = correlation;
-      bestOffset = offset;
-    }
-  }
-
-  if (bestOffset === -1 || bestCorrelation < 0.01) {
-    return null;
-  }
-
-  return sampleRate / bestOffset;
-}
-
+// MİKROFONU BAŞLAT
 async function startAnalysis() {
+  if (stream || audioContext) {
+    stopAnalysis();
+  }
+
   try {
     if (!navigator.mediaDevices ||
         !navigator.mediaDevices.getUserMedia) {
-      throw new Error("Mikrofon erişimi desteklenmiyor. HTTPS kullanmalısın.");
+      throw new Error(
+        "Mikrofon erişimi desteklenmiyor. HTTPS kullanmalısın."
+      );
     }
 
-    
-function stopAnalysis() {
-  if (animationId) {
-    cancelAnimationFrame(animationId);
-    animationId = null;
-  }
-
-  if (stream) {
-    stream.getTracks().forEach(track => track.stop());
-    stream = null;
-  }
-
-  if (audioContext) {
-    audioContext.close();
-    audioContext = null;
-  }
-
-  if (lastDetectedPitch) {
     document.getElementById("status").textContent =
-      "Analiz tamamlandı! Son algılanan nota: " +
-      getNote(lastDetectedPitch);
-  } else {
-    document.getElementById("status").textContent =
-      "Kayıt durduruldu. Net bir nota algılanamadı. Tekrar deneyebilirsin.";
-  }
-}
+      "Mikrofon başlatılıyor...";
+
     stream = await navigator.mediaDevices.getUserMedia({
       audio: true
     });
 
-    audioContext = new (window.AudioContext ||
-      window.webkitAudioContext)();
+    const AudioContextClass =
+      window.AudioContext || window.webkitAudioContext;
 
+    if (!AudioContextClass) {
+      throw new Error("Tarayıcın ses analizini desteklemiyor.");
+    }
+
+    audioContext = new AudioContextClass();
     await audioContext.resume();
 
     analyser = audioContext.createAnalyser();
@@ -549,21 +495,26 @@ function stopAnalysis() {
     const buffer = new Float32Array(analyser.fftSize);
     lastDetectedPitch = null;
 
-document.getElementById("note").textContent = "--";
-document.getElementById("frequency").textContent =
-  "Frekans: -- Hz";    
+    document.getElementById("note").textContent = "--";
+    document.getElementById("frequency").textContent =
+      "Frekans: -- Hz";
 
     document.getElementById("status").textContent =
       "Mikrofon aktif. Rahat bir sesle konuş veya şarkı söyle.";
 
     function update() {
+      if (!analyser || !audioContext || !stream) return;
+
       analyser.getFloatTimeDomainData(buffer);
 
-      const pitch = detectPitch(buffer, audioContext.sampleRate);
-      if (pitch) {
-  lastDetectedPitch = pitch;
-}
+      const pitch = detectPitch(
+        buffer,
+        audioContext.sampleRate
+      );
+
       if (pitch && pitch > 50 && pitch < 1500) {
+        lastDetectedPitch = pitch;
+
         document.getElementById("note").textContent =
           getNote(pitch);
 
@@ -581,13 +532,17 @@ document.getElementById("frequency").textContent =
     update();
 
   } catch (error) {
+    stopAnalysis();
+
     document.getElementById("status").textContent =
       "Mikrofon açılamadı: " + error.message;
   }
 }
 
+// MİKROFONU DURDUR
+// Bu fonksiyon yalnızca bir kez tanımlanmıştır.
 function stopAnalysis() {
-  if (animationId) {
+  if (animationId !== null) {
     cancelAnimationFrame(animationId);
     animationId = null;
   }
@@ -597,19 +552,39 @@ function stopAnalysis() {
     stream = null;
   }
 
-  if (audioContext) {
-    audioContext.close();
-    audioContext = null;
+  if (microphone) {
+    microphone.disconnect();
+    microphone = null;
   }
 
-  document.getElementById("status").textContent =
-    "Mikrofon durduruldu.";
+  analyser = null;
+
+  if (audioContext) {
+    const oldContext = audioContext;
+    audioContext = null;
+    oldContext.close().catch(() => {});
+  }
+
+  document.getElementById("note").textContent = "--";
+  document.getElementById("frequency").textContent =
+    "Frekans: -- Hz";
+
+  if (lastDetectedPitch !== null) {
+    document.getElementById("status").textContent =
+      "Analiz tamamlandı! Son algılanan nota: " +
+      getNote(lastDetectedPitch);
+  } else {
+    document.getElementById("status").textContent =
+      "Mikrofon durduruldu.";
+  }
 }
 
 // GELİŞİM TAKİBİ
 function getProgress() {
-  return JSON.parse(localStorage.getItem("sesProgress") ||
-    '{"count":0,"dates":[]}');
+  return JSON.parse(
+    localStorage.getItem("sesProgress") ||
+    '{"count":0,"dates":[]}'
+  );
 }
 
 function completeExercise() {
@@ -632,8 +607,10 @@ function completeExercise() {
 
 function updateProgress() {
   const data = getProgress();
+
   document.getElementById("total").textContent = data.count;
-  document.getElementById("days").textContent = data.dates.length;
+  document.getElementById("days").textContent =
+    data.dates.length;
 }
 
 function resetProgress() {
@@ -685,6 +662,7 @@ function newMessage() {
     messages[random];
 }
 
+// SAYFA AÇILDIĞINDA
 updateProgress();
 </script>
 
