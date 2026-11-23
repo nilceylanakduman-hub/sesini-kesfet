@@ -1,0 +1,608 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sesini Keşfet</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg,#f5eaff,#e5f5ff,#fff0f5);
+  color: #333;
+  min-height: 100vh;
+}
+
+header {
+  background: linear-gradient(120deg,#8857d9,#c16dd9);
+  color: white;
+  padding: 30px 20px;
+  text-align: center;
+  border-radius: 0 0 30px 30px;
+}
+
+header h1 {
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+
+header p {
+  opacity: .95;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  padding: 18px 10px;
+}
+
+nav button {
+  border: none;
+  background: white;
+  padding: 11px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  color: #7745ad;
+  font-weight: bold;
+}
+
+nav button:hover {
+  background: #e8d9ff;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 15px;
+}
+
+.card {
+  background: white;
+  padding: 25px;
+  margin-bottom: 20px;
+  border-radius: 22px;
+  box-shadow: 0 5px 20px #7550a015;
+}
+
+h2 {
+  color: #8050c5;
+  margin-bottom: 15px;
+}
+
+h3 {
+  margin-bottom: 10px;
+  color: #6c4c9b;
+}
+
+p {
+  line-height: 1.7;
+}
+
+.hero {
+  text-align: center;
+  background: linear-gradient(135deg,#fff,#f2e8ff);
+}
+
+.hero .emoji {
+  font-size: 55px;
+  margin-bottom: 12px;
+}
+
+.big-note {
+  font-size: 65px;
+  color: #9858d4;
+  font-weight: bold;
+  margin: 15px;
+}
+
+.frequency {
+  color: #777;
+  font-size: 18px;
+}
+
+.main-button {
+  background: linear-gradient(120deg,#8957d5,#c26edb);
+  color: white;
+  border: none;
+  padding: 14px 25px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 10px 5px;
+}
+
+.main-button:hover {
+  opacity: .85;
+}
+
+.secondary {
+  background: #eee5fa;
+  color: #7549ad;
+}
+
+.exercise {
+  background: #f7f0ff;
+  padding: 17px;
+  border-radius: 15px;
+  margin: 12px 0;
+}
+
+textarea {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  resize: vertical;
+  font-family: inherit;
+  margin-top: 10px;
+}
+
+.stat {
+  background: #f5edff;
+  padding: 18px;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.stat strong {
+  font-size: 27px;
+  color: #8957d5;
+  display: block;
+}
+
+#status {
+  color: #8050c5;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
+footer {
+  text-align: center;
+  padding: 25px;
+  color: #777;
+  font-size: 13px;
+}
+
+@media(max-width:600px) {
+  header h1 {font-size:25px;}
+  .card {padding:19px;}
+  nav button {font-size:12px;padding:10px;}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🎵 Sesini Keşfet</h1>
+  <p>Sesini tanı, geliştir ve kendine güven!</p>
+</header>
+
+<nav>
+  <button onclick="showPage('home')">🏠 Ana Sayfa</button>
+  <button onclick="showPage('analysis')">🎤 Ses Analizi</button>
+  <button onclick="showPage('training')">🎼 Egzersizler</button>
+  <button onclick="showPage('progress')">📈 Gelişimim</button>
+  <button onclick="showPage('confidence')">💜 Özgüven</button>
+</nav>
+
+<main class="container">
+
+<!-- ANA SAYFA -->
+<section id="home" class="page active">
+  <div class="card hero">
+    <div class="emoji">🎤</div>
+    <h2>Sesini keşfetmeye hazır mısın?</h2>
+    <p>
+      Her ses özeldir. Şarkı söylemek yalnızca doğuştan
+      gelen bir yetenek değildir. Eğitim ve düzenli
+      çalışmalarla ses becerilerini geliştirebilirsin.
+    </p>
+    <button class="main-button" onclick="showPage('analysis')">
+      Sesimi Tanımaya Başla
+    </button>
+  </div>
+
+  <div class="card">
+    <h2>✨ Bugünün hedefi</h2>
+    <p>Sesini tanımak için kendine birkaç dakika ayır.
+    Küçük çalışmalar zamanla gelişimine katkı sağlar.</p>
+  </div>
+
+  <div class="card">
+    <h2>🌸 Unutma!</h2>
+    <p>Mükemmel olmak zorunda değilsin.
+    Önemli olan kendini başkalarıyla karşılaştırmak
+    yerine kendi gelişimini takip etmektir.</p>
+  </div>
+</section>
+
+<!-- SES ANALİZİ -->
+<section id="analysis" class="page">
+  <div class="card hero">
+    <h2>🎤 Ses Analizi</h2>
+    <p>Bir ses çıkar ve uygulamanın sesinin temel
+    frekansını ölçmesini sağla.</p>
+
+    <div class="big-note" id="note">--</div>
+    <div class="frequency" id="frequency">Frekans: -- Hz</div>
+    <p id="status">Mikrofon henüz başlatılmadı.</p>
+
+    <button class="main-button" id="startBtn"
+      onclick="startAnalysis()">Mikrofonu Başlat</button>
+
+    <button class="main-button secondary"
+      onclick="stopAnalysis()">Durdur</button>
+  </div>
+
+  <div class="card">
+    <h3>📌 Bu analiz ne yapıyor?</h3>
+    <p>Sesinin temel frekansını yaklaşık olarak ölçer
+    ve en yakın müzik notasını gösterir. Bu sonuç,
+    sesinin güzelliğini, şarkı söyleme yeteneğini
+    veya ses aralığının tamamını ölçmez.</p>
+  </div>
+</section>
+
+<!-- EGZERSİZLER -->
+<section id="training" class="page">
+  <div class="card">
+    <h2>🎼 Ses Egzersizleri</h2>
+    <p>Başlangıç seviyesindeki çalışmalarını seç.</p>
+
+    <div class="exercise">
+      <h3>🌬️ 1. Nefes Farkındalığı</h3>
+      <p>Rahat bir pozisyonda otur.
+      Burnundan doğal ve rahat bir nefes al,
+      ardından yavaşça ver. Kendini zorlamadan
+      birkaç kez tekrarla.</p>
+    </div>
+
+    <div class="exercise">
+      <h3>🎵 2. Ses Isınması</h3>
+      <p>Rahat ses aralığında hafifçe "mmm"
+      sesi çıkar. Sesini zorlamadan birkaç kez
+      tekrarla.</p>
+    </div>
+
+    <div class="exercise">
+      <h3>🎹 3. Nota Çalışması</h3>
+      <p>Bir piyano notasını dinle ve rahatça
+      tekrar etmeye çalış. Zamanla farklı
+      notaları tanımayı öğren.</p>
+    </div>
+
+    <div class="exercise">
+      <h3>🎤 4. Serbest Şarkı Söyleme</h3>
+      <p>Sevdiğin bir şarkının rahat sesine uygun
+      bir bölümünü söyle. Kendini zorlamamaya
+      dikkat et.</p>
+    </div>
+
+    <button class="main-button" onclick="completeExercise()">
+      Bugünkü çalışmamı tamamladım
+    </button>
+    <p id="exerciseMessage"></p>
+  </div>
+</section>
+
+<!-- GELİŞİM -->
+<section id="progress" class="page">
+  <div class="card">
+    <h2>📈 Gelişimim</h2>
+    <p>Bu alan, düzenli çalışmalarını takip etmene
+    yardımcı olur.</p>
+
+    <div class="stat">
+      <strong id="total">0</strong>
+      Tamamlanan çalışma
+    </div>
+
+    <div class="stat" style="margin-top:12px">
+      <strong id="days">0</strong>
+      Toplam çalışma günü
+    </div>
+
+    <button class="main-button secondary"
+      onclick="resetProgress()">İstatistikleri sıfırla</button>
+  </div>
+</section>
+
+<!-- ÖZGÜVEN -->
+<section id="confidence" class="page">
+  <div class="card">
+    <h2>💜 Özgüven Köşesi</h2>
+
+    <div class="exercise">
+      <h3>Sesim bana özeldir.</h3>
+      <p>Her insanın sesi farklıdır. Kendini başka
+      insanlarla karşılaştırmak yerine kendi
+      gelişimine odaklan.</p>
+    </div>
+
+    <div class="exercise">
+      <h3>Şarkı söylemek öğrenilebilir.</h3>
+      <p>Doğuştan gelen özellikler ses becerilerini
+      etkileyebilir. Ancak eğitim, teknik ve düzenli
+      çalışma da şarkı söyleme becerisinin
+      gelişmesinde önemli rol oynar.</p>
+    </div>
+
+    <div class="exercise">
+      <h3>Küçük adımlar önemlidir.</h3>
+      <p>Bugün öğrendiğin küçük bir teknik,
+      gelecekteki gelişiminin parçası olabilir.</p>
+    </div>
+
+    <button class="main-button" onclick="newMessage()">
+      Bana motivasyon ver ✨
+    </button>
+    <h3 id="motivation" style="margin-top:15px">
+      Kendine inan, sesini keşfet!
+    </h3>
+  </div>
+
+  <div class="card">
+    <h2>📝 Ses Günlüğüm</h2>
+    <p>Bugünkü çalışman hakkında ne düşünüyorsun?</p>
+    <textarea id="journal" rows="4"
+      placeholder="Bugün sesimle ilgili neler fark ettim?"></textarea>
+    <button class="main-button" onclick="saveJournal()">
+      Notumu Kaydet
+    </button>
+    <p id="journalMessage"></p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Sesini Keşfet © 2026
+  <br>
+  Bu uygulama eğitim ve kişisel gelişim amaçlıdır.
+</footer>
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(page => {
+    page.classList.remove('active');
+  });
+  document.getElementById(id).classList.add('active');
+}
+
+// SES ANALİZİ
+let audioContext;
+let analyser;
+let microphone;
+let animationId;
+let stream;
+
+function getNote(freq) {
+  const notes = [
+    "Do","Do♯","Re","Re♯","Mi","Fa",
+    "Fa♯","Sol","Sol♯","La","La♯","Si"
+  ];
+
+  const midi = Math.round(69 + 12 * Math.log2(freq / 440));
+  const note = notes[(midi % 12 + 12) % 12];
+  const octave = Math.floor(midi / 12) - 1;
+
+  return note + octave;
+}
+
+function detectPitch(buffer, sampleRate) {
+  let size = buffer.length;
+  let rms = 0;
+
+  for (let i = 0; i < size; i++) {
+    rms += buffer[i] * buffer[i];
+  }
+
+  rms = Math.sqrt(rms / size);
+
+  if (rms < 0.015) return null;
+
+  let bestOffset = -1;
+  let bestCorrelation = 0;
+
+  for (let offset = 30; offset < size / 2; offset++) {
+    let correlation = 0;
+
+    for (let i = 0; i < size / 2; i++) {
+      correlation += buffer[i] * buffer[i + offset];
+    }
+
+    correlation /= size / 2;
+
+    if (correlation > bestCorrelation) {
+      bestCorrelation = correlation;
+      bestOffset = offset;
+    }
+  }
+
+  if (bestOffset === -1 || bestCorrelation < 0.01) {
+    return null;
+  }
+
+  return sampleRate / bestOffset;
+}
+
+async function startAnalysis() {
+  try {
+    if (!navigator.mediaDevices ||
+        !navigator.mediaDevices.getUserMedia) {
+      throw new Error("Mikrofon erişimi desteklenmiyor. HTTPS kullanmalısın.");
+    }
+
+    stopAnalysis();
+
+    stream = await navigator.mediaDevices.getUserMedia({
+      audio: true
+    });
+
+    audioContext = new (window.AudioContext ||
+      window.webkitAudioContext)();
+
+    await audioContext.resume();
+
+    analyser = audioContext.createAnalyser();
+    analyser.fftSize = 4096;
+
+    microphone = audioContext.createMediaStreamSource(stream);
+    microphone.connect(analyser);
+
+    const buffer = new Float32Array(analyser.fftSize);
+
+    document.getElementById("status").textContent =
+      "Mikrofon aktif. Rahat bir sesle konuş veya şarkı söyle.";
+
+    function update() {
+      analyser.getFloatTimeDomainData(buffer);
+
+      const pitch = detectPitch(buffer, audioContext.sampleRate);
+
+      if (pitch && pitch > 50 && pitch < 1500) {
+        document.getElementById("note").textContent =
+          getNote(pitch);
+
+        document.getElementById("frequency").textContent =
+          "Frekans: " + pitch.toFixed(1) + " Hz";
+      } else {
+        document.getElementById("note").textContent = "--";
+        document.getElementById("frequency").textContent =
+          "Belirgin bir nota algılanamadı.";
+      }
+
+      animationId = requestAnimationFrame(update);
+    }
+
+    update();
+
+  } catch (error) {
+    document.getElementById("status").textContent =
+      "Mikrofon açılamadı: " + error.message;
+  }
+}
+
+function stopAnalysis() {
+  if (animationId) {
+    cancelAnimationFrame(animationId);
+    animationId = null;
+  }
+
+  if (stream) {
+    stream.getTracks().forEach(track => track.stop());
+    stream = null;
+  }
+
+  if (audioContext) {
+    audioContext.close();
+    audioContext = null;
+  }
+
+  document.getElementById("status").textContent =
+    "Mikrofon durduruldu.";
+}
+
+// GELİŞİM TAKİBİ
+function getProgress() {
+  return JSON.parse(localStorage.getItem("sesProgress") ||
+    '{"count":0,"dates":[]}');
+}
+
+function completeExercise() {
+  const data = getProgress();
+  const today = new Date().toLocaleDateString("tr-TR");
+
+  data.count++;
+
+  if (!data.dates.includes(today)) {
+    data.dates.push(today);
+  }
+
+  localStorage.setItem("sesProgress", JSON.stringify(data));
+
+  document.getElementById("exerciseMessage").textContent =
+    "Harika! Bugünkü çalışman kaydedildi. 🎉";
+
+  updateProgress();
+}
+
+function updateProgress() {
+  const data = getProgress();
+  document.getElementById("total").textContent = data.count;
+  document.getElementById("days").textContent = data.dates.length;
+}
+
+function resetProgress() {
+  if (confirm("Çalışma istatistiklerini silmek istiyor musun?")) {
+    localStorage.removeItem("sesProgress");
+    updateProgress();
+  }
+}
+
+// SES GÜNLÜĞÜ
+function saveJournal() {
+  const text = document.getElementById("journal").value.trim();
+
+  if (!text) {
+    document.getElementById("journalMessage").textContent =
+      "Önce bir not yazmalısın.";
+    return;
+  }
+
+  const entries = JSON.parse(
+    localStorage.getItem("sesJournal") || "[]"
+  );
+
+  entries.push({
+    date: new Date().toLocaleDateString("tr-TR"),
+    text: text
+  });
+
+  localStorage.setItem("sesJournal", JSON.stringify(entries));
+
+  document.getElementById("journal").value = "";
+  document.getElementById("journalMessage").textContent =
+    "Notun bu cihazda kaydedildi! 💜";
+}
+
+// MOTİVASYON
+function newMessage() {
+  const messages = [
+    "Sesin sana özeldir. Onu keşfetmekten vazgeçme! 💜",
+    "Her çalışma yeni bir deneyimdir! 🎵",
+    "Kendini başkalarıyla değil, geçmişteki kendinle karşılaştır.",
+    "Gelişim bir süreçtir. Sabırlı ol! 🌸",
+    "Şarkı söylemekten keyif almayı unutma!"
+  ];
+
+  const random = Math.floor(Math.random() * messages.length);
+
+  document.getElementById("motivation").textContent =
+    messages[random];
+}
+
+updateProgress();
+</script>
+
+</body>
+</html>
