@@ -394,7 +394,7 @@ let analyser;
 let microphone;
 let animationId;
 let stream;
-
+let lastDetectedPitch = null;
 function getNote(freq) {
   const notes = [
     "Do","Do♯","Re","Re♯","Mi","Fa",
@@ -409,13 +409,66 @@ function getNote(freq) {
 }
 
 function detectPitch(buffer, sampleRate) {
-  let size = buffer.length;
-  let rms = 0;
+  const size = buffer.length;
+  let mean = 0;
 
   for (let i = 0; i < size; i++) {
-    rms += buffer[i] * buffer[i];
+    mean += buffer[i];
   }
 
+  mean /= size;
+
+  const data = new Float32Array(size);
+  let energy = 0;
+
+  for (let i = 0; i < size; i++) {
+    data[i] = buffer[i] - mean;
+    energy += data[i] * data[i];
+  }
+
+  const rms = Math.sqrt(energy / size);
+
+  if (rms < 0.01) return null;
+
+  const minLag = Math.floor(sampleRate / 1000);
+  const maxLag = Math.min(
+    Math.floor(sampleRate / 65),
+    Math.floor(size / 2)
+  );
+
+  let bestLag = -1;
+  let bestCorrelation = 0;
+
+  for (let lag = minLag; lag <= maxLag; lag++) {
+    let cross = 0;
+    let energy1 = 0;
+    let energy2 = 0;
+
+    for (let i = 0; i < size - lag; i++) {
+      cross += data[i] * data[i + lag];
+      energy1 += data[i] * data[i];
+      energy2 += data[i + lag] * data[i + lag];
+    }
+
+    const correlation = cross /
+      Math.sqrt(energy1 * energy2 + 1e-12);
+
+    if (
+      correlation > bestCorrelation &&
+      lag > minLag &&
+      lag < maxLag
+    ) {
+      bestCorrelation = correlation;
+      bestLag = lag;
+    }
+  }
+
+  if (bestLag === -1 || bestCorrelation < 0.65) {
+    return null;
+  }
+
+  return sampleRate / bestLag;
+}
   rms = Math.sqrt(rms / size);
 
   if (rms < 0.015) return null;
@@ -452,8 +505,32 @@ async function startAnalysis() {
       throw new Error("Mikrofon erişimi desteklenmiyor. HTTPS kullanmalısın.");
     }
 
-    stopAnalysis();
+    
+function stopAnalysis() {
+  if (animationId) {
+    cancelAnimationFrame(animationId);
+    animationId = null;
+  }
 
+  if (stream) {
+    stream.getTracks().forEach(track => track.stop());
+    stream = null;
+  }
+
+  if (audioContext) {
+    audioContext.close();
+    audioContext = null;
+  }
+
+  if (lastDetectedPitch) {
+    document.getElementById("status").textContent =
+      "Analiz tamamlandı! Son algılanan nota: " +
+      getNote(lastDetectedPitch);
+  } else {
+    document.getElementById("status").textContent =
+      "Kayıt durduruldu. Net bir nota algılanamadı. Tekrar deneyebilirsin.";
+  }
+}
     stream = await navigator.mediaDevices.getUserMedia({
       audio: true
     });
@@ -470,6 +547,11 @@ async function startAnalysis() {
     microphone.connect(analyser);
 
     const buffer = new Float32Array(analyser.fftSize);
+    lastDetectedPitch = null;
+
+document.getElementById("note").textContent = "--";
+document.getElementById("frequency").textContent =
+  "Frekans: -- Hz";    
 
     document.getElementById("status").textContent =
       "Mikrofon aktif. Rahat bir sesle konuş veya şarkı söyle.";
@@ -478,7 +560,9 @@ async function startAnalysis() {
       analyser.getFloatTimeDomainData(buffer);
 
       const pitch = detectPitch(buffer, audioContext.sampleRate);
-
+      if (pitch) {
+  lastDetectedPitch = pitch;
+}
       if (pitch && pitch > 50 && pitch < 1500) {
         document.getElementById("note").textContent =
           getNote(pitch);
